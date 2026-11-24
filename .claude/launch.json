@@ -1,0 +1,31 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "viewer",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "tools/viewer/serve.js"
+      ],
+      "port": 5178
+    },
+    {
+      "name": "app",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/vite/bin/vite.js",
+        "app"
+      ],
+      "port": 5179
+    },
+    {
+      "name": "dist",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--env-file-if-exists=.env",
+        "tools/serve_dist.js"
+      ],
+      "port": 5180
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Avatar viewer</title>
+<style>
+  body { margin: 0; background: #cdcdcd; font: 14px system-ui, sans-serif; overflow: hidden; }
+  nav { position: fixed; top: 10px; left: 10px; display: flex; gap: 8px; align-items: center; }
+  footer { position: fixed; bottom: 8px; left: 10px; right: 10px; font-size: 12px; color: #333; }
+</style>
+<nav>
+  <select id="model" aria-label="Outfit">
+    <option value="ps1_character_textured">Jacket</option>
+    <option value="ps1_character_kurta_salwar">Kurta salwar</option>
+  </select>
+  <select id="view" aria-label="View">
+    <option value="0">Front</option><option value="45">Three-quarter</option>
+    <option value="90">Side</option><option value="180">Back</option>
+  </select>
+  <label><input type="checkbox" id="head"> Head close-up</label>
+  <label><input type="checkbox" id="play"> Play animation</label>
+</nav>
+<footer id="credit"></footer>
+<script type="importmap">{ "imports": { "three": "/node_modules/three/build/three.module.js", "three/addons/": "/node_modules/three/examples/jsm/" } }</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const $ = id => document.getElementById(id);
+const renderer = new THREE.WebGLRenderer({ antialias: false });
+document.body.append(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xcdcdcd);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xbbbbbb, 2.2));
+const key = new THREE.DirectionalLight(0xffffff, 1.2);
+key.position.set(1, 2, 3);
+scene.add(key);
+const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 1000);
+const controls = new OrbitControls(camera, renderer.domElement);
+const timer = new THREE.Timer();
+let root, mixer, loadId = 0;
+
+function frame() {
+  if (!root) return;
+  root.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(root, true), size = box.getSize(new THREE.Vector3());
+  const target = box.getCenter(new THREE.Vector3());
+  let distance = size.y * 2.2;
+  if ($('head').checked) {
+    const top = box.max.y - size.y * 0.075, p = new THREE.Vector3(), headBox = new THREE.Box3();
+    root.traverse(o => {
+      if (!o.isMesh) return;
+      for (let i = 0; i < o.geometry.attributes.position.count; i++) {
+        o.getVertexPosition(i, p).applyMatrix4(o.matrixWorld);
+        if (p.y > box.max.y - size.y * 0.12) headBox.expandByPoint(p);
+      }
+    });
+    headBox.getCenter(target).setY(top);
+    distance = size.y * 0.5;
+  }
+  const yaw = THREE.MathUtils.degToRad(Number($('view').value));
+  camera.position.set(target.x + Math.sin(yaw) * distance, target.y, target.z + Math.cos(yaw) * distance);
+  controls.target.copy(target);
+}
+
+async function load() {
+  const id = ++loadId, name = $('model').value;
+  const gltf = await new GLTFLoader().loadAsync(`/assets/${name}.glb`);
+  if (id !== loadId) return; // a newer selection replaced this one
+  if (root) scene.remove(root);
+  root = gltf.scene;
+  scene.add(root);
+  mixer = gltf.animations.length ? new THREE.AnimationMixer(root) : null;
+  if (mixer) mixer.clipAction(gltf.animations[0]).play();
+  if (mixer && !$('play').checked) mixer.stopAllAction();
+  $('credit').textContent = gltf.asset.copyright || '';
+  frame();
+  window.viewerReady = name;
+}
+function resize() {
+  renderer.setSize(innerWidth, innerHeight);
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+}
+$('model').onchange = load;
+$('view').onchange = $('head').onchange = frame;
+$('play').onchange = load;
+addEventListener('resize', resize);
+resize();
+load();
+renderer.setAnimationLoop(() => {
+  timer.update();
+  const dt = timer.getDelta();
+  if (mixer && $('play').checked) mixer.update(dt);
+  controls.update();
+  renderer.render(scene, camera);
+});
+</script>

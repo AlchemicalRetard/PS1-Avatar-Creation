@@ -1,0 +1,54 @@
+[
+  {
+    "id": "jacket",
+    "label": "Leather jacket",
+    "files": {
+      "glb": "ps1_character_textured.glb",
+      "body": "ps1_character_texture.png",
+      "face": "ps1_face_placeholder.png",
+      "Jacket_Collar": "ps1_character_collar.png",
+      "skinMask": "ps1_character_skin_mask.png",
+      "hair": "ps1_face_hair.png",
+      "sideLeft": "ps1_character_side_left.png",
+      "sideRight": "ps1_character_side_right.png",
+      "sideMaskLeft": "ps1_character_side_mask_left.png",
+      "sideMaskRight": "ps1_character_side_mask_right.png"
+    },
+    "baseSkin": [
+      196,
+      135,
+      104
+    ],
+    "baseHair": [
+      60,
+      31,
+      89
+    ]
+  },
+  {
+    "id": "kurta_salwar",
+    "label": "Kurta salwar",
+    "files": {
+      "glb": "ps1_character_kurta_salwar.glb",
+      "body": "ps1_kurta_salwar_texture.png",
+      "face": "ps1_kurta_salwar_face.png",
+      "skinMask": "ps1_kurta_salwar_skin_mask.png",
+      "hair": "ps1_kurta_salwar_hair.png",
+      "sideLeft": "ps1_kurta_salwar_side_left.png",
+      "sideRight": "ps1_kurta_salwar_side_right.png",
+      "sideMaskLeft": "ps1_kurta_salwar_side_mask_left.png",
+      "sideMaskRight": "ps1_kurta_salwar_side_mask_right.png",
+      "Kurta_Skirt": "ps1_kurta_salwar_skirt.png"
+    },
+    "baseSkin": [
+      196,
+      135,
+      104
+    ],
+    "baseHair": [
+      44,
+      28,
+      30
+    ]
+  }
+]

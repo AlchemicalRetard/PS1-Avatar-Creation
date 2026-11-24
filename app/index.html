@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Nothing on this page may talk to another server: photos stay on the device. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Face to avatar</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body data-step="start" data-face="no">
+  <main>
+    <section class="photo" aria-label="Your photo">
+      <div class="stage">
+        <canvas id="stage" tabindex="0" aria-label="Photo and face blueprint"></canvas>
+        <video id="video" playsinline muted></video>
+        <p id="count" class="count" aria-live="assertive" hidden></p>
+        <p id="hint" class="hint" role="status"></p>
+      </div>
+      <p id="error" class="error" role="alert" hidden></p>
+
+      <div class="controls" data-for="start shape">
+        <button id="useCamera" class="primary">Use camera</button>
+        <button id="upload">Upload a photo</button>
+        <p class="note" data-for="start">Your photos stay on this device. They are never uploaded.</p>
+      </div>
+      <div class="controls" data-for="camera">
+        <button id="capture" class="primary">Take photo</button>
+        <button id="cancelCamera">Close camera</button>
+      </div>
+      <div class="controls" data-for="align pasted adjust">
+        <div class="sliders">
+          <label>Zoom <input id="zoom" type="range" min="0" max="1" step="0.001"></label>
+          <label>Tilt <input id="tilt" type="range" min="-45" max="45" step="0.5"></label>
+          <label>Width <input id="stretch" type="range" min="0.75" max="1.3" step="0.005"></label>
+        </div>
+        <button id="paste" class="primary" data-for="align">Paste onto avatar</button>
+        <button id="done" class="primary" data-for="adjust">Done</button>
+        <button id="flip" class="side-only" data-for="adjust">Flip photo</button>
+        <button id="retake" data-for="adjust">Retake this photo</button>
+        <button id="remove" class="danger" data-for="align pasted">Delete all photos and start over</button>
+      </div>
+      <input id="file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+    </section>
+
+    <section class="avatar" aria-label="Avatar">
+      <div id="avatar" class="view"></div>
+      <form id="talk" class="talk needs-face">
+        <textarea id="text" rows="2" maxlength="500" aria-label="What should the avatar say?" placeholder="Type something for your avatar to say"></textarea>
+        <div class="controls">
+          <button id="speak" class="primary" type="submit">Speak</button>
+          <label>Voice <select id="voice"></select></label>
+          <label class="speed">Speed <input id="rate" type="range" min="0.6" max="1.5" step="0.05" value="1"></label>
+        </div>
+        <p id="voiceNote" class="note" hidden>This voice is made by SpeechMa, so what you type is sent to them. Your photos are not.</p>
+      </form>
+      <div class="controls needs-face">
+        <button id="makeVideo">Make a video (MP4)</button>
+        <label>Shape
+          <select id="shape">
+            <option value="portrait">Portrait</option>
+            <option value="square">Square</option>
+            <option value="landscape">Landscape</option>
+          </select>
+        </label>
+        <button id="saveModel">Download 3D model (GLB)</button>
+        <p id="soundNote" class="note"></p>
+      </div>
+      <div class="controls">
+        <label>Outfit <select id="outfit"></select></label>
+        <label>Look
+          <select id="look">
+            <option value="retro">Retro</option>
+            <option value="chunky">Chunky</option>
+            <option value="smooth">Smooth photo</option>
+          </select>
+        </label>
+        <label>Background
+          <select id="backdrop">
+            <option value="room">Retro room</option>
+            <option value="plain">Plain</option>
+          </select>
+        </label>
+        <label class="check"><input id="keepHair" type="checkbox" checked> Avatar’s hair</label>
+        <label class="check"><input id="matchSkin" type="checkbox" checked> Match skin</label>
+        <div class="segmented" role="group" aria-label="View">
+          <button id="viewBody" type="button" aria-pressed="true">Body</button><button id="viewHead" type="button" aria-pressed="false">Face</button>
+        </div>
+      </div>
+      <p id="credit" class="note"></p>
+    </section>
+
+    <section class="shapes needs-face" aria-labelledby="sidesTitle">
+      <div class="shapes-head">
+        <h2 id="sidesTitle">Sides of your head</h2>
+        <p id="sideProgress"></p>
+        <button id="takeSides">Take the sides</button>
+      </div>
+      <div id="sideGrid" class="grid"></div>
+    </section>
+
+    <section class="shapes needs-face" aria-labelledby="shapesTitle">
+      <div class="shapes-head">
+        <h2 id="shapesTitle">Mouth shapes</h2>
+        <p id="progress"></p>
+        <button id="takeAll">Take the missing ones</button>
+      </div>
+      <div id="grid" class="grid"></div>
+    </section>
+  </main>
+  <dialog id="clip" aria-labelledby="clipTitle">
+    <h2 id="clipTitle"></h2>
+    <progress id="clipProgress" max="1" aria-labelledby="clipTitle"></progress>
+    <video id="clipVideo" controls playsinline></video>
+    <p id="clipNote" class="note"></p>
+    <div class="controls">
+      <a id="clipSave" class="button primary">Download MP4</a>
+      <button id="clipShare">Share</button>
+      <button id="clipClose"></button>
+    </div>
+  </dialog>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

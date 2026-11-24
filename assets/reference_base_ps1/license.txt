@@ -1,0 +1,11 @@
+Model Information:
+* title:	Base for a ps1 style character
+* source:	https://sketchfab.com/3d-models/base-for-a-ps1-style-character-b00cffd4773f4b8f8aed8c18a47ff54a
+* author:	MR_Fisher (https://sketchfab.com/jereminasopek)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Base for a ps1 style character" (https://sketchfab.com/3d-models/base-for-a-ps1-style-character-b00cffd4773f4b8f8aed8c18a47ff54a) by MR_Fisher (https://sketchfab.com/jereminasopek) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

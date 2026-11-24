@@ -1,0 +1,25 @@
+{
+  "name": "gamex-avatar",
+  "private": true,
+  "scripts": {
+    "dev": "vite app",
+    "build": "node tools/build_avatars.js",
+    "preview": "node tools/render_previews.js",
+    "test": "node --test \"tools/test/*.test.js\" \"app/test/*.test.ts\"",
+    "viewer": "node tools/viewer/serve.js",
+    "typecheck": "tsc -p app",
+    "build:app": "tsc -p app && vite build app",
+    "serve": "node --env-file-if-exists=.env tools/serve_dist.js"
+  },
+  "devDependencies": {
+    "@types/three": "^0.187.0",
+    "gltf-validator": "^2.0.0-dev.3.10",
+    "three": "^0.187.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8"
+  },
+  "dependencies": {
+    "@mediabunny/aac-encoder": "^1.66.4",
+    "mediabunny": "^1.66.4"
+  }
+}
